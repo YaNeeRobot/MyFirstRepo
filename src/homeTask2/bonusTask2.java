@@ -1,6 +1,8 @@
+package homeTask2;
+
 import java.util.Random;
 
-public class Main {
+public class bonusTask2 {
     public static void main(String[] args) {
         Random rand = new Random();
         int Vasily = rand.nextInt(3);
@@ -9,8 +11,8 @@ public class Main {
             System.out.println("Ничья");
         } else if (
                 (Vasily == 0 && Petya == 1) || // Камень > Ножницы
-                (Vasily == 1 && Petya == 2) || // Ножницы > Бумага
-                (Vasily == 2 && Petya == 0)    // Бумага > Камень
+                        (Vasily == 1 && Petya == 2) || // Ножницы > Бумага
+                        (Vasily == 2 && Petya == 0)    // Бумага > Камень
         ) {
             System.out.println("Василий выиграл");
         } else {
