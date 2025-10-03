@@ -1,13 +1,28 @@
 package com.example.dungeon.model;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Room {
     private final String name;
     private final String description;
     private final Map<String, Room> neighbors = new HashMap<>();
     private final List<Item> items = new ArrayList<>();
-    private Monster monster;
+    private final List<Monster> monsters = new ArrayList<>();
+
+    private Set<String> lockedExits = new HashSet<>();
+
+    public boolean isExitLocked(String dir) {
+        return lockedExits.contains(dir);
+    }
+
+    public void lockExit(String dir) {
+        lockedExits.add(dir);
+    }
+
+    public void unlockExit(String direction) {
+        lockedExits.remove(direction);
+    }
 
     public Room(String name, String description) {
         this.name = name;
@@ -18,6 +33,10 @@ public class Room {
         return name;
     }
 
+    public List<Monster> getMonsters() {
+        return monsters;
+    }
+
     public Map<String, Room> getNeighbors() {
         return neighbors;
     }
@@ -26,21 +45,16 @@ public class Room {
         return items;
     }
 
-    public Monster getMonster() {
-        return monster;
-    }
-
-    public void setMonster(Monster m) {
-        this.monster = m;
-    }
-
     public String describe() {
         StringBuilder sb = new StringBuilder(name + ": " + description);
         if (!items.isEmpty()) {
             sb.append("\nПредметы: ").append(String.join(", ", items.stream().map(Item::getName).toList()));
         }
-        if (monster != null) {
-            sb.append("\nВ комнате монстр: ").append(monster.getName()).append(" (ур. ").append(monster.getLevel()).append(")");
+        if (!monsters.isEmpty()) {
+            sb.append("\nМонстры: ");
+            sb.append(monsters.stream()
+                    .map(m -> m.getName() + " (ур. " + m.getLevel() + ")")
+                    .collect(Collectors.joining(", ")));
         }
         if (!neighbors.isEmpty()) {
             sb.append("\nВыходы: ").append(String.join(", ", neighbors.keySet()));
