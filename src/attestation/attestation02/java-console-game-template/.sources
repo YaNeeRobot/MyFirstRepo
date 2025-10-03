@@ -1,0 +1,15 @@
+/home/atom/MyExp/Java_rtk/projects/MyFirstProjectForGit/src/attestation/attestation02/java-console-game-template/src/com/example/dungeon/model/Monster.java
+/home/atom/MyExp/Java_rtk/projects/MyFirstProjectForGit/src/attestation/attestation02/java-console-game-template/src/com/example/dungeon/model/Player.java
+/home/atom/MyExp/Java_rtk/projects/MyFirstProjectForGit/src/attestation/attestation02/java-console-game-template/src/com/example/dungeon/model/Entity.java
+/home/atom/MyExp/Java_rtk/projects/MyFirstProjectForGit/src/attestation/attestation02/java-console-game-template/src/com/example/dungeon/model/Item.java
+/home/atom/MyExp/Java_rtk/projects/MyFirstProjectForGit/src/attestation/attestation02/java-console-game-template/src/com/example/dungeon/model/Weapon.java
+/home/atom/MyExp/Java_rtk/projects/MyFirstProjectForGit/src/attestation/attestation02/java-console-game-template/src/com/example/dungeon/model/GameState.java
+/home/atom/MyExp/Java_rtk/projects/MyFirstProjectForGit/src/attestation/attestation02/java-console-game-template/src/com/example/dungeon/model/Potion.java
+/home/atom/MyExp/Java_rtk/projects/MyFirstProjectForGit/src/attestation/attestation02/java-console-game-template/src/com/example/dungeon/model/Key.java
+/home/atom/MyExp/Java_rtk/projects/MyFirstProjectForGit/src/attestation/attestation02/java-console-game-template/src/com/example/dungeon/model/Room.java
+/home/atom/MyExp/Java_rtk/projects/MyFirstProjectForGit/src/attestation/attestation02/java-console-game-template/src/com/example/dungeon/core/WorldInfo.java
+/home/atom/MyExp/Java_rtk/projects/MyFirstProjectForGit/src/attestation/attestation02/java-console-game-template/src/com/example/dungeon/core/Game.java
+/home/atom/MyExp/Java_rtk/projects/MyFirstProjectForGit/src/attestation/attestation02/java-console-game-template/src/com/example/dungeon/core/Command.java
+/home/atom/MyExp/Java_rtk/projects/MyFirstProjectForGit/src/attestation/attestation02/java-console-game-template/src/com/example/dungeon/core/SaveLoad.java
+/home/atom/MyExp/Java_rtk/projects/MyFirstProjectForGit/src/attestation/attestation02/java-console-game-template/src/com/example/dungeon/core/InvalidCommandException.java
+/home/atom/MyExp/Java_rtk/projects/MyFirstProjectForGit/src/attestation/attestation02/java-console-game-template/src/com/example/dungeon/Main.java
