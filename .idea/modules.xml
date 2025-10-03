@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MyFirstProjectForGit.iml" filepath="$PROJECT_DIR$/MyFirstProjectForGit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/attestation/attestation02/java-console-game-template/java-console-game-template.iml" filepath="$PROJECT_DIR$/src/attestation/attestation02/java-console-game-template/java-console-game-template.iml" />
     </modules>
   </component>
 </project>
