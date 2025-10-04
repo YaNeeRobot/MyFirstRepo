@@ -26,9 +26,37 @@ public class Game {
         commands.put("help", (ctx, a) -> System.out.println("Команды: " + String.join(", ", commands.keySet())));
         commands.put("gc-stats", (ctx, a) -> {
             Runtime rt = Runtime.getRuntime();
-            long free = rt.freeMemory(), total = rt.totalMemory(), used = total - free;  // три лонг переменные для проверки использования памяти
+            long free = rt.freeMemory(), total = rt.totalMemory(), used = total - free;  // Три long переменные для проверки использования памяти
             System.out.println("Память: used=" + used + " free=" + free + " total=" + total);
         });
+
+        commands.put("alloc", (ctx, a) -> {     //вместо gc-stats умещаю замеры памяти до и после alloc
+            Runtime rt = Runtime.getRuntime();
+
+            // Состояние ДО
+            long freeBefore = rt.freeMemory(), totalBefore = rt.totalMemory(), usedBefore = totalBefore - freeBefore;
+            System.out.println("Память ДО: used=" + usedBefore + " free=" + freeBefore + " total=" + totalBefore);
+
+            // Выделяем 50 МБ
+            System.out.println("Выделяем 50 МБ памяти...");
+            List<byte[]> garbage = new ArrayList<>();
+            for (int i = 0; i < 50; i++) {
+                garbage.add(new byte[1_000_000]);
+            }
+
+            // Состояние ПОСЛЕ выделения (ДО GC)
+            long freeAfterAlloc = rt.freeMemory(), totalAfterAlloc = rt.totalMemory(), usedAfterAlloc = totalAfterAlloc - freeAfterAlloc;
+            System.out.println("Память ПОСЛЕ выделения: used=" + usedAfterAlloc + " free=" + freeAfterAlloc + " total=" + totalAfterAlloc);
+
+            // Запускаем GC
+            System.out.println("Вызываем сборку мусора (GC)...");
+            System.gc();
+
+            // Состояние ПОСЛЕ GC
+            long freeAfterGC = rt.freeMemory(), totalAfterGC = rt.totalMemory(), usedAfterGC = totalAfterGC - freeAfterGC;
+            System.out.println("Память ПОСЛЕ GC: used=" + usedAfterGC + " free=" + freeAfterGC + " total=" + totalAfterGC);
+        });
+
         commands.put("look", (ctx, unused) -> System.out.println(ctx.getCurrent().describe())); //объектGameState.даетКомнату.даетОписаниеКомнаты
         commands.put("move", (ctx, a) -> {
             if (a.isEmpty()) {
@@ -247,6 +275,11 @@ public class Game {
             }
         } catch (IOException e) {
             System.out.println("Ошибка ввода/вывода: " + e.getMessage());
+        } finally {
+            // Сохраняем счёт при любом выходе из игры
+            if (state.getPlayer() != null) {
+                SaveLoad.writeScore(state.getPlayer().getName(), state.getScore());
+            }
         }
     }
 }

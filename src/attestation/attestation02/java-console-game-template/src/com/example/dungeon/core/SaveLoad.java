@@ -157,7 +157,7 @@ public class SaveLoad {
         }
     }
 
-    private static void writeScore(String player, int score) {
+    public static void writeScore(String player, int score) {
         try {
             boolean header = !Files.exists(SCORES);
             try (BufferedWriter w = Files.newBufferedWriter(SCORES, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {

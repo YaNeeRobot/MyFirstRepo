@@ -1,3 +1,5 @@
 player;Герой;32;5
-inventory;
-room;Лес
+inventory;Key:Ржавый ключ
+room;Тайная комната
+room-monsters;
+room-items;
