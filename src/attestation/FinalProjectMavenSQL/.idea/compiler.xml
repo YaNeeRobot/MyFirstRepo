@@ -9,8 +9,5 @@
         <module name="myMavenSQLproject" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="java-multithreading-practice" target="21" />
-    </bytecodeTargetLevel>
   </component>
 </project>

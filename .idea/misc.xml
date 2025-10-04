@@ -5,6 +5,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/src/attestation/attestation02/my_maven_module/pom.xml" />
+        <option value="$PROJECT_DIR$/src/attestation/FinalProjectMavenSQL/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
