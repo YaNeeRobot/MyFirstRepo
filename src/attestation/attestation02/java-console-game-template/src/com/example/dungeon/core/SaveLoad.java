@@ -21,7 +21,19 @@ public class SaveLoad {
 
             // 2. Сохраняем инвентарь
             String inv = p.getInventory().stream()
-                    .map(i -> i.getClass().getSimpleName() + ":" + i.getName())
+                    .map(i -> {
+                        if (i instanceof Potion) {
+                            Potion potion = (Potion) i;
+                            return "Potion:" + potion.getName() + ":" + potion.getHeal();
+                        } else if (i instanceof Weapon) {
+                            Weapon weapon = (Weapon) i;
+                            return "Weapon:" + weapon.getName() + ":" + weapon.getBonus();
+                        } else if (i instanceof Key) {
+                            return "Key:" + i.getName();
+                        }
+                        return "";
+                    })
+                    .filter(str -> !str.isEmpty())
                     .collect(Collectors.joining(","));
             w.write("inventory;" + inv);
             w.newLine();
@@ -40,7 +52,19 @@ public class SaveLoad {
             w.newLine();
 
             String roomItems = currentRoom.getItems().stream()
-                    .map(i -> i.getClass().getSimpleName() + ":" + i.getName())
+                    .map(i -> {
+                        if (i instanceof Potion) {
+                            Potion potion = (Potion) i;
+                            return "Potion:" + potion.getName() + ":" + potion.getHeal();
+                        } else if (i instanceof Weapon) {
+                            Weapon weapon = (Weapon) i;
+                            return "Weapon:" + weapon.getName() + ":" + weapon.getBonus();
+                        } else if (i instanceof Key) {
+                            return "Key:" + i.getName();
+                        }
+                        return "";
+                    })
+                    .filter(str -> !str.isEmpty())
                     .collect(Collectors.joining(","));
             w.write("room-items;" + roomItems);
             w.newLine();
@@ -85,12 +109,25 @@ public class SaveLoad {
             String invData = map.get("inventory");
             if (invData != null && !invData.isEmpty()) {
                 for (String tok : invData.split(",")) {
-                    String[] t = tok.split(":", 2);
+                    String[] t = tok.split(":", 3); // ← теперь делим на максимум 3 части
                     if (t.length < 2) continue;
+
                     switch (t[0]) {
-                        case "Potion" -> p.getInventory().add(new Potion(t[1], 5));
-                        case "Key" -> p.getInventory().add(new Key(t[1]));
-                        case "Weapon" -> p.getInventory().add(new Weapon(t[1], 3));
+                        case "Potion":
+                            if (t.length >= 3) {
+                                int heal = Integer.parseInt(t[2]);
+                                p.getInventory().add(new Potion(t[1], heal));
+                            }
+                            break;
+                        case "Key":
+                            p.getInventory().add(new Key(t[1]));
+                            break;
+                        case "Weapon":
+                            if (t.length >= 3) {
+                                int bonus = Integer.parseInt(t[2]);
+                                p.getInventory().add(new Weapon(t[1], bonus));
+                            }
+                            break;
                     }
                 }
             }
@@ -126,12 +163,24 @@ public class SaveLoad {
             String roomItems = map.get("room-items");
             if (roomItems != null && !roomItems.isEmpty()) {
                 for (String tok : roomItems.split(",")) {
-                    String[] t = tok.split(":", 2);
+                    String[] t = tok.split(":", 3);
                     if (t.length < 2) continue;
                     switch (t[0]) {
-                        case "Potion" -> current.getItems().add(new Potion(t[1], 5));
-                        case "Key" -> current.getItems().add(new Key(t[1]));
-                        case "Weapon" -> current.getItems().add(new Weapon(t[1], 3));
+                        case "Potion":
+                            if (t.length >= 3) {
+                                int heal = Integer.parseInt(t[2]);
+                                current.getItems().add(new Potion(t[1], heal));
+                            }
+                            break;
+                        case "Key":
+                            current.getItems().add(new Key(t[1]));
+                            break;
+                        case "Weapon":
+                            if (t.length >= 3) {
+                                int bonus = Integer.parseInt(t[2]);
+                                current.getItems().add(new Weapon(t[1], bonus));
+                            }
+                            break;
                     }
                 }
             }

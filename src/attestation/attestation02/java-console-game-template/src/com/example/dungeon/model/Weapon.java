@@ -13,6 +13,11 @@ public class Weapon extends Item {
         var p = ctx.getPlayer();
         p.setAttack(p.getAttack() + bonus);
         System.out.println("Оружие экипировано. Атака теперь: " + p.getAttack());
-        p.getInventory().remove(this);
+        //p.getInventory().remove(this);
+        // Не удаляем меч — он остаётся в инвентаре, как экипированный предмет
+    }
+
+    public int getBonus() {
+        return bonus;
     }
 }

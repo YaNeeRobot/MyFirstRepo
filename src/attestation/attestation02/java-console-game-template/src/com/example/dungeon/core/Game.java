@@ -58,6 +58,11 @@ public class Game {
         });
 
         commands.put("look", (ctx, unused) -> System.out.println(ctx.getCurrent().describe())); //объектGameState.даетКомнату.даетОписаниеКомнаты
+        commands.put("stats", (ctx, a) -> {
+            Player p = ctx.getPlayer();
+            System.out.println("Здоровье: " + p.getHp());
+            System.out.println("Атака: " + p.getAttack());
+        });
         commands.put("move", (ctx, a) -> {
             if (a.isEmpty()) {
                 throw new InvalidCommandException("Укажите какое-то направление: север, юг, восток, запад");
@@ -193,7 +198,18 @@ public class Game {
             }
 
             // Атака игрока
-            int damageToMonster = player.getAttack();
+            int baseDamage = player.getAttack();
+            int damageToMonster = baseDamage;
+
+            // Особое условие: Безымянный Страж уязвим ТОЛЬКО к Мечу Хранителей
+            if ("Безымянный Страж".equals(target.getName())) {
+                boolean hasSword = player.getInventory().stream()
+                        .anyMatch(item -> "Меч Хранителей".equals(item.getName()));
+                if (!hasSword) {
+                    System.out.println("Безымянный Страж неуязвим! Вам нужен Меч Хранителей!");
+                    damageToMonster = 0;
+                }
+            }
             target.setHp(target.getHp() - damageToMonster);
             System.out.println("Вы бьёте " + target.getName() + " на " + damageToMonster + ". HP: " + Math.max(0, target.getHp()));
 
@@ -203,6 +219,13 @@ public class Game {
                 // Дроп: например, зелье
                 room.getItems().add(new Potion("Зелье победы", 10));
                 monsters.remove(target); // удаляем из комнаты
+                // Проверка на финального босса
+                if ("Безымянный Страж".equals(target.getName())) {
+                    System.out.println("Артефакт взрывается ослепительным светом! Проклятие снято.");
+                    System.out.println("🎉 ПОБЕДА! Ты спас Эльдарию!");
+                    SaveLoad.writeScore(ctx.getPlayer().getName(), ctx.getScore());
+                    System.exit(0);
+                }
                 return;
             }
 
@@ -214,7 +237,9 @@ public class Game {
             if (player.getHp() <= 0) {
                 System.out.println("💀 Вы погибли! Игра окончена.");
                 System.out.println("Ваш итоговый счёт: " + ctx.getScore());
-                System.exit(0);
+                SaveLoad.writeScore(ctx.getPlayer().getName(), ctx.getScore());
+                System.out.println("Игра окончена. Спасибо за игру!");
+                return; // выйти из команды, а не из JVM
             }
         });
         commands.put("save", (ctx, a) -> SaveLoad.save(ctx));
@@ -230,21 +255,36 @@ public class Game {
         Player hero = new Player("Герой", 20, 5);
         state.setPlayer(hero);
 
-        Room square = new Room("Площадь", "Каменная площадь с фонтаном.");
-        Room forest = new Room("Лес", "Шелест листвы и птичий щебет.");
-        Room cave = new Room("Пещера", "Темно и сыро.");
-        Room secret = new Room("Тайная комната", "Здесь спрятано сокровище!");
-        cave.getNeighbors().put("north", secret); // но дверь закрыта!
-// Не добавляем обратную связь — пока нельзя выйти
-        square.getNeighbors().put("север", forest);
-        forest.getNeighbors().put("юг", square);
-        forest.getNeighbors().put("восток", cave);
-        cave.getNeighbors().put("запад", forest);
-        cave.lockExit("north"); // дверь в secret закрыта
-        cave.getItems().add(new Key("Ржавый ключ")); // ключ в пещере
+        Room square = new Room("Площадь", "Каменная площадь с целебным фонтаном. Последний луч света перед тьмой.");
+        Room forest = new Room("Лес", "Шелест листвы и птичий щебет. Но ветер несёт запах тлена...");
+        Room cave = new Room("Пещера", "Темно и сыро. Где-то слышен звон цепей...");
+        Room secret = new Room("Тайная комната", "Здесь пахнет древностью. На камне лежит Меч Хранителей — последняя надежда против тьмы.");
+        Room sanctuary = new Room("Святилище Артефакта", "Тьма сгущается. На пьедестале пульсирует Чёрный Артефакт.");
 
+        // Связи между комнатами
+        square.getNeighbors().put("north", forest);
+        forest.getNeighbors().put("south", square);
+        forest.getNeighbors().put("east", cave);
+        cave.getNeighbors().put("west", forest);
+        cave.getNeighbors().put("north", secret);
+        secret.getNeighbors().put("south", cave);
+        secret.getNeighbors().put("east", sanctuary); // ← дверь в святилище
+        sanctuary.getNeighbors().put("west", secret);
+
+        // Закрываем дверь в Тайную комнату и в Святилище
+        cave.lockExit("north");        // дверь в Тайную комнату
+        secret.lockExit("east");       // дверь в Святилище
+
+        // Предметы
         forest.getItems().add(new Potion("Малое зелье", 5));
+        cave.getItems().add(new Key("Чёрный Ключ"));
+        secret.getItems().add(new Weapon("Меч Хранителей", 10));
+
+        // Монстры
         forest.getMonsters().add(new Monster("Волк", 1, 8));
+        cave.getMonsters().add(new Monster("Гоблин-страж", 2, 15));
+        cave.getMonsters().add(new Monster("Скелет", 1, 10)); // второй монстр
+        sanctuary.getMonsters().add(new Monster("Безымянный Страж", 5, 100));
 
         state.setCurrent(square);
     }

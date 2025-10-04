@@ -1,5 +1,5 @@
-player;Герой;32;5
-inventory;Key:Ржавый ключ
-room;Тайная комната
-room-monsters;
+player;Герой;38;45
+inventory;Key:Чёрный Ключ,Weapon:Меч Хранителей:10
+room;Святилище Артефакта
+room-monsters;Безымянный Страж;5;55
 room-items;

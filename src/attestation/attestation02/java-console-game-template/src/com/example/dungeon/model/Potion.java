@@ -15,4 +15,8 @@ public class Potion extends Item {
         System.out.println("Выпито зелье: +" + heal + " HP. Текущее HP: " + p.getHp());
         p.getInventory().remove(this);
     }
+
+    public int getHeal() {
+        return heal;
+    }
 }
